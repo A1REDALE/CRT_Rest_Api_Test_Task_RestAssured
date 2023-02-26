@@ -5,7 +5,7 @@ import org.junit.Test;
 import java.util.Random;
 
 import static org.hamcrest.CoreMatchers.*;
-
+import static org.hamcrest.Matchers.emptyArray;
 
 public class GetBookInfoTest {
 
@@ -37,7 +37,8 @@ public class GetBookInfoTest {
     public void getListOfBooks() {
         bookId = bookClient.addBook(Book.randomBookWithAllFields()).extract().body().path("book.id");
         bookClient.getListOfBooks()
-                .body("books", notNullValue())
+                .assertThat()
+                .body("Books", not(emptyArray()))
                 .and()
                 .statusCode(200);
     }

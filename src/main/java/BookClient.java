@@ -96,8 +96,9 @@ public class BookClient {
 
     public ValidatableResponse deleteWithoutId() {
         return getSpec()
+                .pathParam("bookId","")
                 .when()
-                .delete(BOOKS)
+                .delete(GET_BOOK)
                 .then().log().all()
                 .assertThat();
     }

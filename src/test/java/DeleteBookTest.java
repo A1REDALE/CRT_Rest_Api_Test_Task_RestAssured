@@ -32,7 +32,7 @@ public class DeleteBookTest {
     @Test
     public void deleteBookWithoutId() {
         bookClient.deleteWithoutId()
-                .statusCode(405);
+                .statusCode(404);
     }
 
     @Test
