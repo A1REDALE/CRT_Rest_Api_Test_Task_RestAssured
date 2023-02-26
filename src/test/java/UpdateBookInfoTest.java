@@ -27,7 +27,7 @@ public class UpdateBookInfoTest {
     @Test
     public void updateBookInfo() {
         bookClient.getRefreshBookInfo(bookId, Book.randomBookWithAllFields())
-                .body("book.name", notNullValue())
+                .body("book.id", equalTo(bookId))
                 .and()
                 .statusCode(200);
     }
