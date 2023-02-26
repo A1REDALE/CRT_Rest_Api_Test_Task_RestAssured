@@ -7,6 +7,7 @@ import java.util.Random;
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.Matchers.emptyArray;
 
+
 public class GetBookInfoTest {
 
     BookClient bookClient;
@@ -29,7 +30,6 @@ public class GetBookInfoTest {
         bookId = bookClient.addBook(Book.randomBookWithAllFields()).extract().body().path("book.id");
         bookClient.getBook(bookId)
                 .body("book.id", equalTo(bookId))
-                .and()
                 .statusCode(200);
     }
 
@@ -37,9 +37,7 @@ public class GetBookInfoTest {
     public void getListOfBooks() {
         bookId = bookClient.addBook(Book.randomBookWithAllFields()).extract().body().path("book.id");
         bookClient.getListOfBooks()
-                .assertThat()
                 .body("Books", not(emptyArray()))
-                .and()
                 .statusCode(200);
     }
 
@@ -48,9 +46,8 @@ public class GetBookInfoTest {
         bookId = bookClient.addBook(Book.randomBookWithAllFields()).extract().body().path("book.id");
         int emptyId = 0;
         bookClient.getBookWithoutId(emptyId)
-                .statusCode(404)
-                .assertThat()
-                .body("error", endsWith("not found"));
+                .body("error", endsWith("not found"))
+                .statusCode(404);
     }
 
     @Test
@@ -58,9 +55,8 @@ public class GetBookInfoTest {
         bookId = bookClient.addBook(Book.randomBookWithAllFields()).extract().path("book.id");
         int wrongId = bookId + new Random().nextInt(100);
         bookClient.getBook(wrongId)
-                .statusCode(404)
-                .assertThat()
-                .body("error", endsWith("not found"));
+                .body("error", endsWith("not found"))
+                .statusCode(404);
     }
 }
 

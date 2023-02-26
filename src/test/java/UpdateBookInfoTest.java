@@ -28,7 +28,6 @@ public class UpdateBookInfoTest {
     public void updateBookInfo() {
         bookClient.getRefreshBookInfo(bookId, Book.randomBookWithAllFields())
                 .body("book.id", equalTo(bookId))
-                .and()
                 .statusCode(200);
     }
 
@@ -43,7 +42,6 @@ public class UpdateBookInfoTest {
         int wrongId = bookId + new Random().nextInt(100);
         bookClient.getRefreshBookInfo(wrongId, Book.randomBookWithAllFields())
                 .statusCode(404)
-                .assertThat()
                 .body("error", containsString("not found"));
     }
 
@@ -51,7 +49,6 @@ public class UpdateBookInfoTest {
     public void updateBookInfoWithoutIsElectronicBookField() {
         bookClient.getRefreshBookInfo(bookId, Book.randomBookWithoutIsElectronicBookField())
                 .statusCode(400)
-                .assertThat()
                 .body("error", equalTo("IsElectronicBook is required"));
     }
 
@@ -59,7 +56,6 @@ public class UpdateBookInfoTest {
     public void updateBookInfoWithoutYearField() {
         bookClient.getRefreshBookInfo(bookId, Book.randomBookWithoutYearField())
                 .statusCode(400)
-                .assertThat()
                 .body("error", equalTo("Year is required"));
     }
 
@@ -67,7 +63,6 @@ public class UpdateBookInfoTest {
     public void updateBookInfoWithoutAuthorField() {
         bookClient.getRefreshBookInfo(bookId, Book.randomBookWithoutAuthorField())
                 .statusCode(400)
-                .assertThat()
                 .body("error", equalTo("Author is required"));
     }
 
@@ -87,7 +82,6 @@ public class UpdateBookInfoTest {
     public void updateBookInfoWithEmptyRequestBody() {
         bookClient.getRefreshBookInfo(bookId, Book.bookWithoutRequiredField())
                 .statusCode(400)
-                .assertThat()
                 .body("error", equalTo("Not found request Json body"));
     }
 }

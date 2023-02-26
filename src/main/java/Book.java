@@ -3,10 +3,10 @@ import org.apache.maven.surefire.shared.lang3.RandomStringUtils;
 import java.util.Random;
 
 public class Book {
-    private String name;
-    private Object author;
-    private Object year;
-    private Object isElectronicBook;
+    private final Object name;
+    private final Object author;
+    private final Object year;
+    private final Object isElectronicBook;
 
     private Book(BookBuilder bookBuilder) {
         name = bookBuilder.name;
@@ -15,45 +15,13 @@ public class Book {
         isElectronicBook = bookBuilder.isElectronicBook;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Object getAuthor() {
-        return author;
-    }
-
-    public void setAuthor(Object author) {
-        this.author = author;
-    }
-
-    public Object getYear() {
-        return year;
-    }
-
-    public void setYear(int year) {
-        this.year = year;
-    }
-
-    public Object isElectronicBook() {
-        return isElectronicBook;
-    }
-
-    public void setElectronicBook(Object electronicBook) {
-        isElectronicBook = electronicBook;
-    }
-
     public static class BookBuilder {
-        private String name;
+        private Object name;
         private Object author;
         private Object year;
         private Object isElectronicBook;
 
-        public BookBuilder(String name) {
+        public BookBuilder(Object name) {
             this.name = name;
         }
 
@@ -114,6 +82,11 @@ public class Book {
                 .build();
     }
 
+    public static Book randomBookWithNameFieldWithIncorrectValue() {
+        return new Book.BookBuilder(new Random().nextInt(10))
+                .build();
+    }
+
     public static Book randomBookWithNameFieldAndIsElectronicBookWithIncorrectValue() {
         return new Book.BookBuilder(RandomStringUtils.randomAlphabetic(10))
                 .setElectronicBook(RandomStringUtils.randomAlphabetic(6))
@@ -128,7 +101,7 @@ public class Book {
 
     public static Book randomBookWithNameFieldAndAuthorWithIncorrectValue(){
         return new Book.BookBuilder(RandomStringUtils.randomAlphabetic(10))
-                .setAuthor(1234)
+                .setAuthor(new Random().nextInt(10))
                 .build();
     }
 

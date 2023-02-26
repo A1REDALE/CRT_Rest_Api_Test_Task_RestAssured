@@ -2,8 +2,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.*;
 
 public class AddBookTest {
     BookClient bookClient;
@@ -25,7 +24,6 @@ public class AddBookTest {
     public void checkAddBookWithAllFilledFields() {
         bookId = bookClient.addBook(Book.randomBookWithAllFields())
                 .body("book.id", notNullValue())
-                .and()
                 .statusCode(201)
                 .extract().path("book.id");
     }
@@ -34,36 +32,36 @@ public class AddBookTest {
     public void checkAddBookWithRequiredField() {
         bookId = bookClient.addBook(Book.randomBookWithRequiredField())
                 .body("book.id", notNullValue())
-                .and()
                 .statusCode(201)
                 .extract().path("book.id");
     }
 
     @Test
-    public void checkAddBookWithRequiredFieldAndAuthorWithIncorrectValue() {
-        bookId = bookClient.addBook(Book.randomBookWithNameFieldAndAuthorWithIncorrectValue())
-                .body("book.id", notNullValue())
-                .and()
+    public void checkAddBookWithRequiredFieldWithIncorrectValue() {
+        bookClient.addBook(Book.randomBookWithNameFieldWithIncorrectValue())
                 .statusCode(400)
-                .extract().path("book.id");
+                .body("error", equalTo("Name must be String type (Unicode)"));
+    }
+
+    @Test
+    public void checkAddBookWithRequiredFieldAndAuthorWithIncorrectValue() {
+        bookClient.addBook(Book.randomBookWithNameFieldAndAuthorWithIncorrectValue())
+                .statusCode(400)
+                .body("error", containsString("Author must be String type"));
     }
 
     @Test
     public void checkAddBookWithRequiredFieldAndIsElectronicWithIncorrectValue() {
-        bookId = bookClient.addBook(Book.randomBookWithNameFieldAndIsElectronicBookWithIncorrectValue())
-                .body("book.id", notNullValue())
-                .and()
+        bookClient.addBook(Book.randomBookWithNameFieldAndIsElectronicBookWithIncorrectValue())
                 .statusCode(400)
-                .extract().path("book.id");
+                .body("error", containsString("isElectronic must be Boolean type"));
     }
 
     @Test
     public void checkAddBookWithRequiredFieldAndYearWithIncorrectValue() {
-        bookId = bookClient.addBook(Book.randomBookWithNameFieldAndYearBookWithIncorrectValue())
-                .body("book.id", notNullValue())
-                .and()
+        bookClient.addBook(Book.randomBookWithNameFieldAndYearBookWithIncorrectValue())
                 .statusCode(400)
-                .extract().path("book.id");
+                .body("error", containsString("Year must be int type"));
     }
 
     @Test
@@ -76,13 +74,15 @@ public class AddBookTest {
 
     @Test
     public void checkAddBookWithoutRequestBody() {
-        bookClient.addBookWithoutRequestBody(Book.randomBookWithRequiredField())
+        bookClient.addBookWithoutRequestBody(Book.bookWithoutRequiredField())
                 .statusCode(400);
     }
 
     @Test
     public void checkAddBookWithEmptyRequestBody() {
         bookClient.addBook(Book.bookWithoutRequiredField())
-                .statusCode(400);
+                .statusCode(400)
+                .assertThat()
+                .body("error", equalTo("Name is required"));;
     }
 }
