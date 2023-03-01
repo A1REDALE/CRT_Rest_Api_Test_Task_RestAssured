@@ -15,7 +15,6 @@ public class Book {
     private final Object year;
     private final Object isElectronicBook;
 
-
     public static Book createBookWithAllFields(){
         return Book.builder().name(RandomStringUtils.randomAlphabetic(10))
                 .author(RandomStringUtils.randomAlphabetic(10))
