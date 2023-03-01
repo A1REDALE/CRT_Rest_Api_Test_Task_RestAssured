@@ -14,7 +14,7 @@ public class UpdateBookInfoTest {
     @Before
     public void setUp() {
         bookClient = new BookClient();
-        bookId = bookClient.addBook(Book.randomBookWithAllFields()).extract().path("book.id");
+        bookId = bookClient.addBook(Book.createBookWithAllFields()).extract().path("book.id");
     }
 
     @After
@@ -26,49 +26,49 @@ public class UpdateBookInfoTest {
 
     @Test
     public void updateBookInfo() {
-        bookClient.getRefreshBookInfo(bookId, Book.randomBookWithAllFields())
+        bookClient.getRefreshBookInfo(bookId, Book.createBookWithAllFields())
                 .body("book.id", equalTo(bookId))
                 .statusCode(200);
     }
 
     @Test
     public void updateBookInfoWithoutId() {
-        bookClient.getRefreshBookInfoWithoutId(Book.randomBookWithAllFields())
+        bookClient.getRefreshBookInfoWithoutId(Book.createBookWithAllFields())
                 .statusCode(404);
     }
 
     @Test
     public void updateBookInfoWithWrongId() {
         int wrongId = bookId + new Random().nextInt(100);
-        bookClient.getRefreshBookInfo(wrongId, Book.randomBookWithAllFields())
+        bookClient.getRefreshBookInfo(wrongId, Book.createBookWithAllFields())
                 .statusCode(404)
                 .body("error", containsString("not found"));
     }
 
     @Test
     public void updateBookInfoWithoutIsElectronicBookField() {
-        bookClient.getRefreshBookInfo(bookId, Book.randomBookWithoutIsElectronicBookField())
+        bookClient.getRefreshBookInfo(bookId, Book.createBookWithoutIsElectronicField())
                 .statusCode(400)
                 .body("error", equalTo("IsElectronicBook is required"));
     }
 
     @Test
     public void updateBookInfoWithoutYearField() {
-        bookClient.getRefreshBookInfo(bookId, Book.randomBookWithoutYearField())
+        bookClient.getRefreshBookInfo(bookId, Book.createBookWithoutYearField())
                 .statusCode(400)
                 .body("error", equalTo("Year is required"));
     }
 
     @Test
     public void updateBookInfoWithoutAuthorField() {
-        bookClient.getRefreshBookInfo(bookId, Book.randomBookWithoutAuthorField())
+        bookClient.getRefreshBookInfo(bookId, Book.createBookWithoutAuthorField())
                 .statusCode(400)
                 .body("error", equalTo("Author is required"));
     }
 
     @Test
     public void updateBookInfoWithoutNameField() {
-        bookClient.getRefreshBookInfo(bookId, Book.bookWithoutRequiredField())
+        bookClient.getRefreshBookInfo(bookId, Book.createBookWithoutRequiredField())
                 .statusCode(400);
     }
 
@@ -80,12 +80,8 @@ public class UpdateBookInfoTest {
 
     @Test
     public void updateBookInfoWithEmptyRequestBody() {
-        bookClient.getRefreshBookInfo(bookId, Book.bookWithoutRequiredField())
+        bookClient.getRefreshBookInfo(bookId, Book.createBookWithoutRequiredField())
                 .statusCode(400)
                 .body("error", equalTo("Not found request Json body"));
     }
 }
-
-
-
-

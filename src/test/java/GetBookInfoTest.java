@@ -16,6 +16,7 @@ public class GetBookInfoTest {
     @Before
     public void setUp() {
         bookClient = new BookClient();
+        bookId = bookClient.addBook(Book.createBookWithAllFields()).extract().body().path("book.id");
     }
 
     @After
@@ -27,7 +28,7 @@ public class GetBookInfoTest {
 
     @Test
     public void getBookInfoWithId() {
-        bookId = bookClient.addBook(Book.randomBookWithAllFields()).extract().body().path("book.id");
+
         bookClient.getBook(bookId)
                 .body("book.id", equalTo(bookId))
                 .statusCode(200);
@@ -35,7 +36,6 @@ public class GetBookInfoTest {
 
     @Test
     public void getListOfBooks() {
-        bookId = bookClient.addBook(Book.randomBookWithAllFields()).extract().body().path("book.id");
         bookClient.getListOfBooks()
                 .body("Books", not(emptyArray()))
                 .statusCode(200);
@@ -43,7 +43,6 @@ public class GetBookInfoTest {
 
     @Test
     public void getBookInfoWithoutId() {
-        bookId = bookClient.addBook(Book.randomBookWithAllFields()).extract().body().path("book.id");
         int emptyId = 0;
         bookClient.getBookWithoutId(emptyId)
                 .body("error", endsWith("not found"))
@@ -52,7 +51,6 @@ public class GetBookInfoTest {
 
     @Test
     public void getBookInfoWithWrongId() {
-        bookId = bookClient.addBook(Book.randomBookWithAllFields()).extract().path("book.id");
         int wrongId = bookId + new Random().nextInt(100);
         bookClient.getBook(wrongId)
                 .body("error", endsWith("not found"))

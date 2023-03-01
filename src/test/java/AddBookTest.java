@@ -22,7 +22,7 @@ public class AddBookTest {
 
     @Test
     public void checkAddBookWithAllFilledFields() {
-        bookId = bookClient.addBook(Book.randomBookWithAllFields())
+        bookId = bookClient.addBook(Book.createBookWithAllFields())
                 .body("book.id", notNullValue())
                 .statusCode(201)
                 .extract().path("book.id");
@@ -30,7 +30,7 @@ public class AddBookTest {
 
     @Test
     public void checkAddBookWithRequiredField() {
-        bookId = bookClient.addBook(Book.randomBookWithRequiredField())
+        bookId = bookClient.addBook(Book.createBookWithNameField())
                 .body("book.id", notNullValue())
                 .statusCode(201)
                 .extract().path("book.id");
@@ -38,35 +38,35 @@ public class AddBookTest {
 
     @Test
     public void checkAddBookWithRequiredFieldWithIncorrectValue() {
-        bookClient.addBook(Book.randomBookWithNameFieldWithIncorrectValue())
+        bookClient.addBook(Book.createBookWithNameFieldWithIncorrectValue())
                 .statusCode(400)
                 .body("error", equalTo("Name must be String type (Unicode)"));
     }
 
     @Test
     public void checkAddBookWithRequiredFieldAndAuthorWithIncorrectValue() {
-        bookClient.addBook(Book.randomBookWithNameFieldAndAuthorWithIncorrectValue())
+        bookClient.addBook(Book.createBookWithNameFieldAndAuthorWithIncorrectValue())
                 .statusCode(400)
                 .body("error", containsString("Author must be String type"));
     }
 
     @Test
     public void checkAddBookWithRequiredFieldAndIsElectronicWithIncorrectValue() {
-        bookClient.addBook(Book.randomBookWithNameFieldAndIsElectronicBookWithIncorrectValue())
+        bookClient.addBook(Book.createBookWithNameFieldAndIsElectronicBookWithIncorrectValue())
                 .statusCode(400)
                 .body("error", containsString("isElectronic must be Boolean type"));
     }
 
     @Test
     public void checkAddBookWithRequiredFieldAndYearWithIncorrectValue() {
-        bookClient.addBook(Book.randomBookWithNameFieldAndYearBookWithIncorrectValue())
+        bookClient.addBook(Book.createBookWithNameFieldAndAuthorWithIncorrectValue())
                 .statusCode(400)
                 .body("error", containsString("Year must be int type"));
     }
 
     @Test
     public void checkAddBookWithoutRequiredField() {
-        bookClient.addBook(Book.bookWithoutRequiredField())
+        bookClient.addBook(Book.createBookWithoutRequiredField())
                 .statusCode(400)
                 .assertThat()
                 .body("error", equalTo("Name is required"));
@@ -74,13 +74,13 @@ public class AddBookTest {
 
     @Test
     public void checkAddBookWithoutRequestBody() {
-        bookClient.addBookWithoutRequestBody(Book.bookWithoutRequiredField())
+        bookClient.addBookWithoutRequestBody()
                 .statusCode(400);
     }
 
     @Test
     public void checkAddBookWithEmptyRequestBody() {
-        bookClient.addBook(Book.bookWithoutRequiredField())
+        bookClient.addBook(Book.createBookWithoutRequiredField())
                 .statusCode(400)
                 .assertThat()
                 .body("error", equalTo("Name is required"));;

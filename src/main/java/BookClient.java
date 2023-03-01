@@ -23,7 +23,7 @@ public class BookClient {
                 .assertThat();
     }
 
-    public ValidatableResponse addBookWithoutRequestBody(Book book) {
+    public ValidatableResponse addBookWithoutRequestBody() {
         return getSpec()
                 .when()
                 .post(BOOKS)

@@ -14,7 +14,7 @@ public class DeleteBookTest {
     @Before
     public void setUp() {
         bookClient = new BookClient();
-        bookId = bookClient.addBook(Book.randomBookWithAllFields()).extract().path("book.id");
+        bookId = bookClient.addBook(Book.createBookWithAllFields()).extract().path("book.id");
     }
 
     @After
