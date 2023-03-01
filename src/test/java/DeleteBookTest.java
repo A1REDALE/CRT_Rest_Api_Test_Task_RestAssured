@@ -40,7 +40,6 @@ public class DeleteBookTest {
         int wrongId = bookId + new Random().nextInt(100);
         bookClient.delete(wrongId)
                 .statusCode(404)
-                .assertThat()
                 .body("error", endsWith("not found"));
     }
 }

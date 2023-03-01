@@ -68,7 +68,6 @@ public class AddBookTest {
     public void checkAddBookWithoutRequiredField() {
         bookClient.addBook(Book.createBookWithoutRequiredField())
                 .statusCode(400)
-                .assertThat()
                 .body("error", equalTo("Name is required"));
     }
 
@@ -82,7 +81,6 @@ public class AddBookTest {
     public void checkAddBookWithEmptyRequestBody() {
         bookClient.addBook(Book.createBookWithoutRequiredField())
                 .statusCode(400)
-                .assertThat()
                 .body("error", equalTo("Name is required"));;
     }
 }
