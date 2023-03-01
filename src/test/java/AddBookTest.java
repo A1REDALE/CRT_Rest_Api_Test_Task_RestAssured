@@ -59,7 +59,7 @@ public class AddBookTest {
 
     @Test
     public void checkAddBookWithRequiredFieldAndYearWithIncorrectValue() {
-        bookClient.addBook(Book.createBookWithNameFieldAndAuthorWithIncorrectValue())
+        bookClient.addBook(Book.createBookWithNameFieldAndYearBookWithIncorrectValue())
                 .statusCode(400)
                 .body("error", containsString("Year must be int type"));
     }
@@ -81,6 +81,6 @@ public class AddBookTest {
     public void checkAddBookWithEmptyRequestBody() {
         bookClient.addBook(Book.createBookWithoutRequiredField())
                 .statusCode(400)
-                .body("error", equalTo("Name is required"));;
+                .body("error", equalTo("Name is required"));
     }
 }
